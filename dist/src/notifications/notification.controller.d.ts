@@ -6,6 +6,7 @@ export declare class NotificationsController {
         title: string;
         body?: string;
         url?: string;
+        navigation_id: " ";
     }): Promise<{
         success: boolean;
         response: string;

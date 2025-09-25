@@ -16,7 +16,7 @@ AppModule = __decorate([
     (0, common_1.Module)({
         imports: [],
         controllers: [notification_controller_1.NotificationsController],
-        providers: [firebase_service_1.FirebaseService]
+        providers: [firebase_service_1.FirebaseService],
     })
 ], AppModule);
 exports.AppModule = AppModule;
