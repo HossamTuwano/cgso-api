@@ -27,11 +27,15 @@ export class NotificationsController {
       apns: {
         headers: {
           "apns-priority": "5",
-          "apns-push-type": "background",
+          "apns-push-type": "alert",
         },
         payload: {
           aps: {
-            "content-available": 1,
+            alert: {
+              title: dto.title,
+              body: dto.body,
+            },
+            sound: "default",
           },
         },
       },
