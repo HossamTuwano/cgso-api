@@ -1,13 +1,9 @@
 import { FirebaseService } from "../firebase/firebase.service";
+import { CreateNotificationDto } from "./notification.dto";
 export declare class NotificationsController {
     private readonly firebaseService;
     constructor(firebaseService: FirebaseService);
-    sendNotification(body: {
-        title: string;
-        body?: string;
-        url?: string;
-        navigation_id: " ";
-    }): Promise<{
+    sendNotification(dto: CreateNotificationDto): Promise<{
         success: boolean;
         response: string;
         error?: undefined;

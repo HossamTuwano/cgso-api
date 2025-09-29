@@ -28,36 +28,27 @@ exports.NotificationsController = void 0;
 const common_1 = require("@nestjs/common");
 const firebase_service_1 = require("../firebase/firebase.service");
 const firebase_admin_1 = __importDefault(require("firebase-admin"));
+const notification_dto_1 = require("./notification.dto");
 const message = "Terminate all Jedi";
 let NotificationsController = class NotificationsController {
     constructor(firebaseService) {
         this.firebaseService = firebaseService;
     }
-    sendNotification(body) {
+    sendNotification(dto) {
         return __awaiter(this, void 0, void 0, function* () {
+            console.log(dto.navigation_id);
             const payload = {
                 topic: "marketing_and_events",
                 notification: {
-                    title: body.title || "Order 66",
-                    body: body.body || message,
+                    title: dto.title,
+                    body: dto.body,
                 },
                 data: {
-                    url: body.url || "",
-                    navigation_id: body.navigation_id || "ParksList",
+                    url: dto.url,
+                    navigation_id: dto.navigation_id,
                 },
                 android: {
                     priority: "high",
-                },
-                apns: {
-                    headers: {
-                        "apns-priority": "10",
-                        "apns-push-type": "background",
-                    },
-                    payload: {
-                        aps: {
-                            "content-available": 1,
-                        },
-                    },
                 },
             };
             try {
@@ -76,7 +67,7 @@ __decorate([
     (0, common_1.Post)(),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object]),
+    __metadata("design:paramtypes", [notification_dto_1.CreateNotificationDto]),
     __metadata("design:returntype", Promise)
 ], NotificationsController.prototype, "sendNotification", null);
 NotificationsController = __decorate([

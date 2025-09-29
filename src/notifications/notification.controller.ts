@@ -1,6 +1,7 @@
 import { Controller, Post, Body } from "@nestjs/common";
 import { FirebaseService } from "../firebase/firebase.service";
 import admin from "firebase-admin";
+import { CreateNotificationDto } from "./notification.dto";
 
 const message = "Terminate all Jedi";
 
@@ -9,31 +10,23 @@ export class NotificationsController {
   constructor(private readonly firebaseService: FirebaseService) {}
 
   @Post()
-  async sendNotification(
-    @Body()
-    body: {
-      title: string;
-      body?: string;
-      url?: string;
-      navigation_id: " ";
-    }
-  ) {
+  async sendNotification(@Body() dto: CreateNotificationDto) {
     const payload = {
       topic: "marketing_and_events",
       notification: {
-        title: body.title || "Order 66",
-        body: body.body || message,
+        title: dto.title,
+        body: dto.body,
       },
       data: {
-        url: body.url || "",
-        navigation_id: body.navigation_id || "ParksList",
+        url: dto.url,
+        navigation_id: dto.navigation_id,
       },
       android: {
         priority: "high" as const,
       },
       apns: {
         headers: {
-          "apns-priority": "10",
+          "apns-priority": "5",
           "apns-push-type": "background",
         },
         payload: {

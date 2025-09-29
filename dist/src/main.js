@@ -15,7 +15,9 @@ function bootstrap() {
     return __awaiter(this, void 0, void 0, function* () {
         const app = yield core_1.NestFactory.create(app_module_1.AppModule);
         app.enableCors();
-        yield app.listen(process.env.PORT || 3000);
+        yield app
+            .listen(process.env.PORT || 3000)
+            .then(() => console.log(`RUNNING ON PORT: ${process.env.PORT}`));
     });
 }
 bootstrap();

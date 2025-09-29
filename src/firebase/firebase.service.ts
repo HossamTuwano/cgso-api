@@ -12,6 +12,8 @@ export class FirebaseService {
         clientEmail: serviceAccount.client_email,
         privateKey: serviceAccount.private_key,
       }),
+
+      databaseURL: `${process.env.DATABASE_URL}`,
     });
   }
 }

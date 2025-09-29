@@ -47,6 +47,7 @@ let FirebaseService = class FirebaseService {
                 clientEmail: piedmont_discovery_702f2_firebase_adminsdk_fbsvc_ba2f6b8eb8_json_1.default.client_email,
                 privateKey: piedmont_discovery_702f2_firebase_adminsdk_fbsvc_ba2f6b8eb8_json_1.default.private_key,
             }),
+            databaseURL: "https://piedmont-discovery-702f2-default-rtdb.firebaseio.com/",
         });
     }
 };
