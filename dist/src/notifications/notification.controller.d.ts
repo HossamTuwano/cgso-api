@@ -5,11 +5,18 @@ export declare class NotificationsController {
     constructor(firebaseService: FirebaseService);
     sendNotification(dto: CreateNotificationDto): Promise<{
         success: boolean;
+        id: string;
+        response?: undefined;
+        error?: undefined;
+    } | {
+        success: boolean;
         response: string;
+        id?: undefined;
         error?: undefined;
     } | {
         success: boolean;
         error: unknown;
+        id?: undefined;
         response?: undefined;
     }>;
 }

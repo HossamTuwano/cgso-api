@@ -36,7 +36,20 @@ let NotificationsController = class NotificationsController {
     }
     sendNotification(dto) {
         return __awaiter(this, void 0, void 0, function* () {
-            console.log(dto.navigation_id);
+            const sendAt = new Date(`${dto.date}T${dto.time}:00Z`).getTime();
+            const db = firebase_admin_1.default.database();
+            const ref = db.ref("announcements").push();
+            yield ref.set({
+                title: dto.title,
+                body: dto.body,
+                url: dto.url,
+                navigation_id: dto.navigation_id,
+                topic: "marketing_and_events",
+                sendAt,
+                status: "pending",
+                createdAt: firebase_admin_1.default.database.ServerValue.TIMESTAMP,
+            });
+            return { success: true, id: ref.key };
             const payload = {
                 topic: "marketing_and_events",
                 notification: {
@@ -49,6 +62,17 @@ let NotificationsController = class NotificationsController {
                 },
                 android: {
                     priority: "high",
+                },
+                apns: {
+                    headers: {
+                        "apns-priority": "5",
+                        "apns-push-type": "background",
+                    },
+                    payload: {
+                        aps: {
+                            "content-available": 1,
+                        },
+                    },
                 },
             };
             try {

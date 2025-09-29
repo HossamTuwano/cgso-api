@@ -2,6 +2,7 @@ import { Controller, Post, Body } from "@nestjs/common";
 import { FirebaseService } from "../firebase/firebase.service";
 import admin from "firebase-admin";
 import { CreateNotificationDto } from "./notification.dto";
+import { title } from "process";
 
 const message = "Terminate all Jedi";
 
@@ -11,6 +12,23 @@ export class NotificationsController {
 
   @Post()
   async sendNotification(@Body() dto: CreateNotificationDto) {
+    const sendAt = new Date(`${dto.date}T${dto.time}:00Z`).getTime();
+    const db = admin.database();
+    const ref = db.ref("announcements").push();
+
+    await ref.set({
+      title: dto.title,
+      body: dto.body,
+      url: dto.url,
+      navigation_id: dto.navigation_id,
+      topic: "marketing_and_events",
+      sendAt,
+      status: "pending",
+      createdAt: admin.database.ServerValue.TIMESTAMP,
+    });
+
+    return { success: true, id: ref.key };
+
     const payload = {
       topic: "marketing_and_events",
       notification: {
