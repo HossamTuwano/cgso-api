@@ -36,7 +36,6 @@ let NotificationsController = class NotificationsController {
     }
     sendNotification(dto) {
         return __awaiter(this, void 0, void 0, function* () {
-            console.log(dto.navigation_id);
             const payload = {
                 topic: "marketing_and_events",
                 notification: {
@@ -49,6 +48,17 @@ let NotificationsController = class NotificationsController {
                 },
                 android: {
                     priority: "high",
+                },
+                apns: {
+                    headers: {
+                        "apns-priority": "5",
+                        "apns-push-type": "background",
+                    },
+                    payload: {
+                        aps: {
+                            "content-available": 1,
+                        },
+                    },
                 },
             };
             try {
