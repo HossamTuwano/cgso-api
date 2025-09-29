@@ -36,6 +36,7 @@ let NotificationsController = class NotificationsController {
     }
     sendNotification(dto) {
         return __awaiter(this, void 0, void 0, function* () {
+            console.log("ran");
             const sendAt = new Date(`${dto.date}T${dto.time}:00Z`).getTime();
             const db = firebase_admin_1.default.database();
             const ref = db.ref("announcements").push();

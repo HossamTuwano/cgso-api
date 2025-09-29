@@ -12,6 +12,7 @@ export class NotificationsController {
 
   @Post()
   async sendNotification(@Body() dto: CreateNotificationDto) {
+    console.log("ran");
     const sendAt = new Date(`${dto.date}T${dto.time}:00Z`).getTime();
     const db = admin.database();
     const ref = db.ref("announcements").push();
