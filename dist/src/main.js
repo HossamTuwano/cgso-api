@@ -13,7 +13,9 @@ const core_1 = require("@nestjs/core");
 const app_module_1 = require("./app.module");
 function bootstrap() {
     return __awaiter(this, void 0, void 0, function* () {
-        const app = yield core_1.NestFactory.create(app_module_1.AppModule);
+        const app = yield core_1.NestFactory.create(app_module_1.AppModule, {
+            logger: ["error", "warn", "log", "debug", "verbose"],
+        });
         app.enableCors();
         yield app
             .listen(process.env.PORT || 3000)

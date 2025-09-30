@@ -29,6 +29,7 @@ const common_1 = require("@nestjs/common");
 const firebase_service_1 = require("../firebase/firebase.service");
 const firebase_admin_1 = __importDefault(require("firebase-admin"));
 const notification_dto_1 = require("./notification.dto");
+const luxon_1 = require("luxon");
 const message = "Terminate all Jedi";
 let NotificationsController = class NotificationsController {
     constructor(firebaseService) {
@@ -36,8 +37,12 @@ let NotificationsController = class NotificationsController {
     }
     sendNotification(dto) {
         return __awaiter(this, void 0, void 0, function* () {
-            console.log("ran");
-            const sendAt = new Date(`${dto.date}T${dto.time}:00Z`).getTime();
+            console.log({ date: dto.date, time: dto.time });
+            const sendAt = luxon_1.DateTime.fromISO(`${dto.date}T${dto.time}`, {
+                zone: "America/New_York",
+            })
+                .toUTC()
+                .toMillis();
             const db = firebase_admin_1.default.database();
             const ref = db.ref("announcements").push();
             yield ref.set({
@@ -49,42 +54,9 @@ let NotificationsController = class NotificationsController {
                 sendAt,
                 status: "pending",
                 createdAt: firebase_admin_1.default.database.ServerValue.TIMESTAMP,
+                error: "",
             });
             return { success: true, id: ref.key };
-            const payload = {
-                topic: "marketing_and_events",
-                notification: {
-                    title: dto.title,
-                    body: dto.body,
-                },
-                data: {
-                    url: dto.url,
-                    navigation_id: dto.navigation_id,
-                },
-                android: {
-                    priority: "high",
-                },
-                apns: {
-                    headers: {
-                        "apns-priority": "5",
-                        "apns-push-type": "background",
-                    },
-                    payload: {
-                        aps: {
-                            "content-available": 1,
-                        },
-                    },
-                },
-            };
-            try {
-                const response = yield firebase_admin_1.default.messaging().send(payload);
-                console.log("Successfully sent", response);
-                return { success: true, response };
-            }
-            catch (error) {
-                console.error("Error sending message", error);
-                return { success: false, error: error };
-            }
         });
     }
 };
