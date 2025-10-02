@@ -29,7 +29,7 @@ const common_1 = require("@nestjs/common");
 const firebase_service_1 = require("../firebase/firebase.service");
 const firebase_admin_1 = __importDefault(require("firebase-admin"));
 const notification_dto_1 = require("./notification.dto");
-const message = "Terminate all Jedi";
+const debugging_1 = require("../../debugging");
 let NotificationsController = class NotificationsController {
     constructor(firebaseService) {
         this.firebaseService = firebaseService;
@@ -66,7 +66,7 @@ let NotificationsController = class NotificationsController {
                 },
             };
             try {
-                const response = yield firebase_admin_1.default.messaging().send(payload);
+                const response = yield firebase_admin_1.default.messaging().send(debugging_1.message);
                 console.log("Successfully sent", response);
                 return { success: true, response };
             }

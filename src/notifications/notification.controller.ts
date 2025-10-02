@@ -2,9 +2,8 @@ import { Controller, Post, Body } from "@nestjs/common";
 import { FirebaseService } from "../firebase/firebase.service";
 import admin from "firebase-admin";
 import { CreateNotificationDto } from "./notification.dto";
-
-const message = "Terminate all Jedi";
-
+import { Message } from "firebase-admin/lib/messaging/messaging-api";
+import { message } from "debugging";
 @Controller("notifications")
 export class NotificationsController {
   constructor(private readonly firebaseService: FirebaseService) {}
@@ -42,7 +41,7 @@ export class NotificationsController {
     };
 
     try {
-      const response = await admin.messaging().send(payload);
+      const response = await admin.messaging().send(message);
       console.log("Successfully sent", response);
 
       return { success: true, response };
