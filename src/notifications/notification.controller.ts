@@ -12,13 +12,10 @@ export class NotificationsController {
   async sendNotification(@Body() dto: CreateNotificationDto) {
     const payload = {
       topic: "marketing_and_events",
-      notification: {
-        title: dto.title,
-        body: dto.body,
-      },
       data: {
         url: dto.url,
         navigation_id: dto.navigation_id,
+        sentTime: Date.now().toLocaleString(),
       },
       android: {
         priority: "high" as const,
@@ -41,7 +38,7 @@ export class NotificationsController {
     };
 
     try {
-      const response = await admin.messaging().send(message);
+      const response = await admin.messaging().send(payload);
       console.log("Successfully sent", response);
 
       return { success: true, response };

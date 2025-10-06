@@ -29,7 +29,6 @@ const common_1 = require("@nestjs/common");
 const firebase_service_1 = require("../firebase/firebase.service");
 const firebase_admin_1 = __importDefault(require("firebase-admin"));
 const notification_dto_1 = require("./notification.dto");
-const debugging_1 = require("../../debugging");
 let NotificationsController = class NotificationsController {
     constructor(firebaseService) {
         this.firebaseService = firebaseService;
@@ -38,13 +37,10 @@ let NotificationsController = class NotificationsController {
         return __awaiter(this, void 0, void 0, function* () {
             const payload = {
                 topic: "marketing_and_events",
-                notification: {
-                    title: dto.title,
-                    body: dto.body,
-                },
                 data: {
                     url: dto.url,
                     navigation_id: dto.navigation_id,
+                    sentTime: Date.now().toLocaleString(),
                 },
                 android: {
                     priority: "high",
@@ -66,7 +62,7 @@ let NotificationsController = class NotificationsController {
                 },
             };
             try {
-                const response = yield firebase_admin_1.default.messaging().send(debugging_1.message);
+                const response = yield firebase_admin_1.default.messaging().send(payload);
                 console.log("Successfully sent", response);
                 return { success: true, response };
             }
