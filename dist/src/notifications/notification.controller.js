@@ -35,12 +35,15 @@ let NotificationsController = class NotificationsController {
     }
     sendNotification(dto) {
         return __awaiter(this, void 0, void 0, function* () {
+            console.log("nav id", dto.navigation_id);
+            const timestamp = Math.floor(new Date(`${dto.date} ${dto.time}`.replace(" ", "T")).getTime() / 1000);
+            const time = Date.now().toString();
             const payload = {
                 topic: "marketing_and_events",
                 data: {
                     url: dto.url,
                     navigation_id: dto.navigation_id,
-                    sentTime: Date.now().toLocaleString(),
+                    sentTime: time,
                 },
                 android: {
                     priority: "high",

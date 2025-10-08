@@ -3,19 +3,25 @@ import { FirebaseService } from "../firebase/firebase.service";
 import admin from "firebase-admin";
 import { CreateNotificationDto } from "./notification.dto";
 import { Message } from "firebase-admin/lib/messaging/messaging-api";
-import { message } from "debugging";
 @Controller("notifications")
 export class NotificationsController {
   constructor(private readonly firebaseService: FirebaseService) {}
 
   @Post()
   async sendNotification(@Body() dto: CreateNotificationDto) {
+    console.log("nav id", dto.navigation_id);
+    const timestamp = Math.floor(
+      new Date(`${dto.date} ${dto.time}`.replace(" ", "T")).getTime() / 1000
+    );
+
+    const time = Date.now().toString();
+
     const payload = {
       topic: "marketing_and_events",
       data: {
         url: dto.url,
         navigation_id: dto.navigation_id,
-        sentTime: Date.now().toLocaleString(),
+        sentTime: time,
       },
       android: {
         priority: "high" as const,
