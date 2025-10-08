@@ -52,25 +52,26 @@ export class NotificationScheduler {
         try {
           await admin.messaging().send({
             topic: "marketing_and_events",
-            notification: {
-              title: notif.title,
-              body: notif.body,
-            },
             data: {
               url: notif.url,
               navigation_id: notif.navigation_id,
+              sentTime: String(notif.sendAt),
             },
             android: {
               priority: "high" as const,
             },
             apns: {
               headers: {
-                "apns-priority": "5",
-                "apns-push-type": "background",
+                "apns-priority": "10",
+                "apns-push-type": "alert",
               },
               payload: {
                 aps: {
-                  "content-available": 1,
+                  alert: {
+                    title: notif.title,
+                    body: notif.body,
+                  },
+                  sound: "default",
                 },
               },
             },
