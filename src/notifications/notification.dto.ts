@@ -1,4 +1,10 @@
-import { IsNotEmpty, IsString, IsUrl, isDateString } from "class-validator";
+import {
+  IsDateString,
+  IsNotEmpty,
+  IsString,
+  IsUrl,
+  isDateString,
+} from "class-validator";
 
 export class CreateNotificationDto {
   @IsString()
@@ -17,11 +23,11 @@ export class CreateNotificationDto {
   @IsNotEmpty()
   navigation_id: string;
 
-  @IsString()
+  @IsDateString()
   @IsNotEmpty()
   time: string;
 
-  @IsString()
+  @IsDateString()
   @IsNotEmpty()
   date: string;
 }

@@ -11,13 +11,15 @@ const common_1 = require("@nestjs/common");
 const notification_controller_1 = require("./notifications/notification.controller");
 const firebase_service_1 = require("./firebase/firebase.service");
 const config_1 = require("@nestjs/config");
+const schedule_1 = require("@nestjs/schedule");
+const notifications_scheduler_1 = require("./notifications/notifications.scheduler");
 let AppModule = class AppModule {
 };
 AppModule = __decorate([
     (0, common_1.Module)({
-        imports: [config_1.ConfigModule.forRoot()],
+        imports: [config_1.ConfigModule.forRoot(), schedule_1.ScheduleModule.forRoot()],
         controllers: [notification_controller_1.NotificationsController],
-        providers: [firebase_service_1.FirebaseService],
+        providers: [firebase_service_1.FirebaseService, notifications_scheduler_1.NotificationScheduler],
     })
 ], AppModule);
 exports.AppModule = AppModule;
