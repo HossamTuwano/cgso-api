@@ -2,55 +2,41 @@ import { Controller, Post, Body } from "@nestjs/common";
 import { FirebaseService } from "../firebase/firebase.service";
 import admin from "firebase-admin";
 import { CreateNotificationDto } from "./notification.dto";
-import { Message } from "firebase-admin/lib/messaging/messaging-api";
+import { title } from "process";
+import { error } from "console";
+import { DateTime } from "luxon";
+
+const message = "Terminate all Jedi";
+
 @Controller("notifications")
 export class NotificationsController {
   constructor(private readonly firebaseService: FirebaseService) {}
 
   @Post()
   async sendNotification(@Body() dto: CreateNotificationDto) {
-    console.log("nav id", dto.navigation_id);
-    const timestamp = Math.floor(
-      new Date(`${dto.date} ${dto.time}`.replace(" ", "T")).getTime() / 1000
-    );
+    console.log({ date: dto.date, time: dto.time });
+    // const sendAt = new Date(`${dto.date}T${dto.time}:00Z`).getTime();
+    const sendAt = DateTime.fromISO(`${dto.date}T${dto.time}`, {
+      zone: "America/New_York", // "America/New_York"
+    })
+      .toUTC()
+      .toMillis();
 
-    const time = Date.now().toString();
+    const db = admin.database();
+    const ref = db.ref("announcements").push();
 
-    const payload = {
+    await ref.set({
+      title: dto.title,
+      body: dto.body,
+      url: dto.url,
+      navigation_id: dto.navigation_id,
       topic: "marketing_and_events",
-      data: {
-        url: dto.url,
-        navigation_id: dto.navigation_id,
-        sentTime: time,
-      },
-      android: {
-        priority: "high" as const,
-      },
-      apns: {
-        headers: {
-          "apns-priority": "5",
-          "apns-push-type": "alert",
-        },
-        payload: {
-          aps: {
-            alert: {
-              title: dto.title,
-              body: dto.body,
-            },
-            sound: "default",
-          },
-        },
-      },
-    };
+      sendAt,
+      status: "pending",
+      createdAt: admin.database.ServerValue.TIMESTAMP,
+      error: "",
+    });
 
-    try {
-      const response = await admin.messaging().send(payload);
-      console.log("Successfully sent", response);
-
-      return { success: true, response };
-    } catch (error) {
-      console.error("Error sending message", error);
-      return { success: false, error: error };
-    }
+    return { success: true, id: ref.key };
   }
 }
